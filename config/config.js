@@ -1,5 +1,5 @@
 module.exports = {
-  port: 3001,
+  port: 8002,
 
   wxConfig: {
     AppID: 'wxcacd35d40eeb1b09',
