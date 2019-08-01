@@ -1,8 +1,12 @@
 const Router = require('koa-router');
-const router = new Router();
+const wxLogic = require('../logic/wx');
 
 
-router.get('/', async ctx => {
+const router = new Router({
+  prefix: '/wx'
+});
+
+router.get('/check_token', async ctx => {
   ctx.body = '成功';
 });
 

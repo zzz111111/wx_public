@@ -4,6 +4,6 @@ module.exports = {
   wxConfig: {
     AppID: 'wxcacd35d40eeb1b09',
     AppSecret: '0ba36024d0ec037d5a704ef25651b189',
-
+    Token: 'zhangyachang', // 自行配置的token
   }
 };
