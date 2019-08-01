@@ -1,7 +1,5 @@
 const config = require('../config/config');
 const utils = require('../utils/utils');
-const config = require('../config');
-
 
 /**
  * 微信公众号相关的接口
