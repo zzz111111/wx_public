@@ -27,7 +27,7 @@ module.exports = {
     });
     if(target){
       return {
-        data: `${target[0]} is required`
+        data: `${target[0]} 不能为空`
       }
     }
   },

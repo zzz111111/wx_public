@@ -45,7 +45,7 @@ exports.analysisToken = async ctx => {
     console.log('消息数据');
     console.log("get请求的参数");
     console.log(ctx.query);
-    let {signature, timestamp, nonce, openid, encrypt_type, msg_signature} = ctx.query;
+    let { signature, timestamp, nonce, openid, encrypt_type, msg_signature } = ctx.query;
     console.log('拿到的消息签名');
     console.log(signature, timestamp, nonce, openid, encrypt_type, msg_signature);
 
@@ -56,11 +56,11 @@ exports.analysisToken = async ctx => {
     let { ToUserName, FromUserName, CreateTime, MsgType, Content, MsgId, Encrypt, MediaId } = xmlCon;
     // // 拿到加密字符串
     let encryptStr = ctx.req.body.xml.Encrypt[0];
-    
+
 
     // 开发者计算签名
     let devMsgSignature = utils.sha1(config.wxConfig.Token, timestamp, nonce, encryptStr);
-    if(devMsgSignature !== msg_signature){
+    if (devMsgSignature !== msg_signature) {
       // 如果不等于 则判断为不是微信发送过来的消息，
       console.log('不是微信发送的');
       return ctx.body = __handleAPIRes('error', 500);
@@ -87,7 +87,7 @@ exports.analysisToken = async ctx => {
         MsgType: 'image',
         MediaId: MediaId[0]
       });
-    }else if(MsgType[0] === 'voice'){
+    } else if (MsgType[0] === 'voice') {
       console.log('语音消息');
       return ctx.body = wxBase.messageFormat({
         ToUserName: FromUserName[0],
@@ -95,11 +95,11 @@ exports.analysisToken = async ctx => {
         MsgType: 'voice',
         MediaId: MediaId[0]
       });
-    }else if(MsgType[0] === 'video'){
+    } else if (MsgType[0] === 'video') {
       // 回复视频消息
-    }else if(MsgType[0] === 'music'){
+    } else if (MsgType[0] === 'music') {
       // 回复音乐消息
-    }else if(MsgType[0] === 'news'){
+    } else if (MsgType[0] === 'news') {
       // 回复图文消息 想要增加更多拓展去消息中添加
       return ctx.body = wxBase.messageFormat({
         ToUserName: FromUserName[0],
@@ -123,6 +123,40 @@ exports.getAccess_token = async ctx => {
     console.log('获取当前的access_token');
     ctx.body = __handleAPIRes({
       access_token: config.wxConfig.access_token
+    });
+  } catch (e) {
+    console.log(e);
+    ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
+  }
+};
+
+/**
+ * 请求signature签名
+ * @params {String} url 当前页面的网址 不包含#及其后面部分
+ */
+exports.getSignature = async ctx => {
+  try {
+    const { url } = ctx.request.body;
+    console.log('请求体');
+    console.log(url);
+
+    let __isUndefined = __mustValue({ url });
+    if (__isUndefined) {
+      return ctx.body = __handleAPIRes(__isUndefined);
+    }
+    let noncestr = utils.randomString(16);
+    let timestamp = parseInt(Date.now() / 1000);
+    console.log('生成的随机字符串为');
+    console.log(noncestr);
+
+    let string = `jsapi_ticket=${config.wxConfig.jsapi_ticket}&noncestr=${noncestr}&timestamp=${timestamp}&url=${url}`;
+    let signature = utils.sha1String(string);
+    // console.log('加密后的signature为');
+    // console.log(signature);
+    ctx.body = __handleAPIRes({
+      noncestr,
+      timestamp,
+      signature
     });
   } catch (e) {
     console.log(e);

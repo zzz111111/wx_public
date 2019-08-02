@@ -13,6 +13,9 @@ router.post('/check_token', middleware.analysisXML, wxLogic.analysisToken); // �
 // 获取当前的access_token
 router.get('/access_token', wxLogic.getAccess_token);
 
+// 请求 jsapi 接口调用的签名字符串 signature
+router.post('/signature', wxLogic.getSignature);
+
 // 获取微信服务器Ip地址
 router.get('/server_ip_list', wxLogic.getServerIpList);
 
