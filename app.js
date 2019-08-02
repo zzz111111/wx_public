@@ -7,6 +7,7 @@ const server = require('http').createServer(app.callback());
 const path = require('path');
 const config = require('./config/config');
 const wxApi = require('./router/wx');
+const wxBase = require('./logic//wxBase');
 
 app.use(async (ctx, next) => {
   // 加上去了 解决 cors 跨域问题
@@ -25,6 +26,9 @@ app.use(koaBody({
 
 app.use(koaStatic(path.join(__dirname, 'public')));
 
+// 初始化微信
+wxBase.init();
+
 app
   .use(wxApi.routes())
   .use(wxApi.allowedMethods());
@@ -32,3 +36,15 @@ app
 server.listen(`${config.port}`, () => {
   console.log(`${config.port}端口监听成功---`);
 });
+
+
+
+// var xml2js = require('xml2js');
+ 
+// var obj = {name: "Super", Surname: "Man", age: 23};
+ 
+// var builder = new xml2js.Builder();
+// var xml = builder.buildObject(obj);
+// console.log('转义的结果');
+// console.log(xml);
+
