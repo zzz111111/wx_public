@@ -131,6 +131,51 @@ exports.getAccess_token = async ctx => {
 };
 
 /**
+ * 微信的auth2.0验证
+ */
+exports.auth = async ctx => {
+  try {
+    console.log('auth回调函数域名');
+    // 1. 用户授权后获取code
+    console.log('获取到的url请求');
+    console.log(ctx.query);
+    const { code, state } = ctx.query;
+    console.log(code, state);
+
+    // 2. 通过code换取 access_token
+    let getAuthResult = await wxBase.getAuthorizationAccess_token(code);
+    console.log('获取到的结果');
+    console.log(getAuthResult);
+
+    if (getAuthResult.errcode) {
+      // 
+      return ctx.body = __handleAPIRes('获取token失败');
+    }
+
+    const { access_token, refresh_token, openid, scope } = getAuthResult;
+    console.log(access_token, refresh_token, openid, scope);
+
+
+    // 3. 刷新access_token 如果需要
+
+
+    // 4. 拉取用户信息(需scope为 snsapi_userinfo)
+    let userInfoResult = await wxBase.gerUserInfoByOpenid({ access_token, openid });
+    console.log('拉取到的用户信息为');
+    console.log(userInfoResult);
+
+    ctx.body = __handleAPIRes({
+      msg: '获取用户信息成功',
+      userInfo: userInfoResult
+    });
+    
+  } catch (e) {
+    console.log(e);
+    ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
+  }
+};
+
+/**
  * 请求signature签名
  * @params {String} url 当前页面的网址 不包含#及其后面部分
  */

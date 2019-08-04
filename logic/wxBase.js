@@ -123,6 +123,53 @@ module.exports = {
   },
 
   /**
+   * 获取authorization的token
+   * @params {String} code 回调函数的code
+   */
+  getAuthorizationAccess_token(code){
+    return axios({
+      url: 'https://api.weixin.qq.com/sns/oauth2/access_token',
+      params: {
+        appid: config.wxConfig.AppID,
+        secret: config.wxConfig.AppSecret,
+        code: code,
+        grant_type: 'authorization_code',
+      }
+    })
+  },
+
+  /**
+   * 通过refresh_token刷新获取access_token
+   * @param {String} refresh_token
+   */
+  refreshToken(refresh_token){
+    return axios({
+      url: 'https://api.weixin.qq.com/sns/oauth2/refresh_token?=APPID&=&refresh_token=REFRESH_TOKEN',
+      params: {
+        appid: config.wxConfig.AppID,
+        grant_type: 'refresh_token',
+        refresh_token: refresh_token
+      }
+    })
+  },
+
+  /**
+   * 通过openid获取用户信息
+   * @param {String} access_token
+   * @param {String} openid 
+   */
+  gerUserInfoByOpenid({access_token, openid}){
+    return axios({
+      url: 'https://api.weixin.qq.com/sns/userinfo',
+      params: {
+        access_token: access_token,
+        openid: openid,
+        lang: 'zh_CN'
+      }
+    })
+  },
+
+  /**
    * 发送消息 目前没有拓展那么多 都是一样的原理 目前只支持 图片 文本 语音 图文消息
    * @params {Object} obj
    *  obj.ToUserName {String} 发送给谁 粉丝号
@@ -188,5 +235,5 @@ module.exports = {
 
 /*
 
-https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcacd35d40eeb1b09&redirect_uri=http://wxgz.xiaoye121.com/about.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5910ab0a942c1030&redirect_uri=http%3A%2F%2Fwxgz.xiaoye121.com%2Fwx%2Fauth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
 */

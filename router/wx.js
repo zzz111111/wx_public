@@ -16,6 +16,9 @@ router.get('/access_token', wxLogic.getAccess_token);
 // 请求 jsapi 接口调用的签名字符串 signature
 router.post('/signature', wxLogic.getSignature);
 
+// 微信接口请求的auth2.0获取用户code去获取用户的openid
+router.get('/auth', wxLogic.auth);
+
 // 获取微信服务器Ip地址
 router.get('/server_ip_list', wxLogic.getServerIpList);
 

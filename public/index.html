@@ -27,6 +27,9 @@
     <p>图片容器</p>
 
   </div>
+  <div>
+    <h2 class="get_auth">请求获取网页授权</h2>
+  </div>
 
 
   <script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
@@ -173,7 +176,18 @@
       });
 
 
+      // 请求获取网页授权
+      $('.get_auth').on('click', function(){
+        console.log('调取网页授权');
+        let redirectUrl = encodeURIComponent('http://wxgz.xiaoye121.com/wx/auth');
+        
+        window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5910ab0a942c1030&redirect_uri=${redirectUrl}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
+      });
+
+
     })();
+
+
 
 
 
