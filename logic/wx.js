@@ -137,7 +137,7 @@ exports.getAccess_token = async ctx => {
 exports.getSignature = async ctx => {
   try {
     const { url } = ctx.request.body;
-    console.log('请求体');
+    console.log('获取jsapi签名接口');
     console.log(url);
 
     let __isUndefined = __mustValue({ url });
@@ -146,8 +146,6 @@ exports.getSignature = async ctx => {
     }
     let noncestr = utils.randomString(16);
     let timestamp = parseInt(Date.now() / 1000);
-    console.log('生成的随机字符串为');
-    console.log(noncestr);
 
     let string = `jsapi_ticket=${config.wxConfig.jsapi_ticket}&noncestr=${noncestr}&timestamp=${timestamp}&url=${url}`;
     let signature = utils.sha1String(string);

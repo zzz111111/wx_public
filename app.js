@@ -14,14 +14,14 @@ app.use(async (ctx, next) => {
   ctx.set("Access-Control-Allow-Origin", "*");
   ctx.set("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
   ctx.set("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-  if(ctx.method == "OPTIONS") ctx.status = 200;
+  if (ctx.method == "OPTIONS") ctx.status = 200;
   else await next();
 });
 
 app.use(logger());
 
 app.use(koaBody({
-  parsedMethods : ['POST', 'PUT', 'DELETE']
+  parsedMethods: ['POST', 'PUT', 'DELETE']
 })); // 将 post 请求的 body 数据挂载到 ctx.request.body 上面
 
 app.use(koaStatic(path.join(__dirname, 'public')));
@@ -34,15 +34,14 @@ app
   .use(wxApi.allowedMethods());
 
 server.listen(`${config.port}`, () => {
-  console.log(`${config.port}端口监听成功---`);
+  console.log(`${config.port}端口服务启动成功---`);
 });
 
 
-
 // var xml2js = require('xml2js');
- 
+
 // var obj = {name: "Super", Surname: "Man", age: 23};
- 
+
 // var builder = new xml2js.Builder();
 // var xml = builder.buildObject(obj);
 // console.log('转义的结果');

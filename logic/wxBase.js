@@ -3,6 +3,8 @@
  */
 const config = require('../config/config');
 const axios = require('../module/axios');
+const server = require('../app');
+
 
 module.exports = {
   // 初始化微信服务 获取access_token，并缓存票据
@@ -27,7 +29,8 @@ module.exports = {
     // console.log('获取到的token码');
     // console.log(tokenResult);
     if (tokenResult.errcode) {
-      return console.log('获取token失败');
+      console.log('获取token失败');
+      return console.log(tokenResult)
     }
     // 请求成功 刷新token
     config.wxConfig.access_token = tokenResult.access_token;
@@ -36,14 +39,25 @@ module.exports = {
     let jsapi_ticketResult = await this.getJsapi_ticket();
     // console.log('获取到的票据结果为');
     // console.log(jsapi_ticketResult);
-    if(jsapi_ticketResult.errcode !== 0){
+    if (jsapi_ticketResult.errcode !== 0) {
       console.log('jsapi_ticket获取失败');
       return console.log(jsapi_ticketResult);
     }
     console.log('刷新jsapi_ticket成功');
     config.wxConfig.jsapi_ticket = jsapi_ticketResult.ticket;
+
+    // 获取完成之后请求微信卡卷的 api_ticket 并刷新
+    let api_ticketResult = await this.getApi_ticket();
+    // console.log('获取的微信卡卷的结果为');
+    // console.log(api_ticketResult);
+    if (api_ticketResult.errcode !== 0) {
+      console.log('获取微信卡卷api_ticket失败');
+      return console.log(api_ticketResult);
+    }
+    console.log('刷新api_ticket成功');
+    config.wxConfig.api_ticket = api_ticketResult.ticket;
   },
-  
+
   /**
    * 获取票据
    */
@@ -59,11 +73,21 @@ module.exports = {
   },
 
   // 获取jsapi_ticket
-  getJsapi_ticket(){
+  getJsapi_ticket() {
     return axios({
       url: 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi',
       params: {
         access_token: config.wxConfig.access_token
+      }
+    });
+  },
+
+  getApi_ticket() {
+    return axios({
+      url: 'https://api.weixin.qq.com/cgi-bin/ticket/getticket',
+      params: {
+        access_token: config.wxConfig.access_token,
+        type: 'wx_card'
       }
     });
   },
@@ -162,3 +186,7 @@ module.exports = {
 };
 
 
+/*
+
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcacd35d40eeb1b09&redirect_uri=http://wxgz.xiaoye121.com/about.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+*/
