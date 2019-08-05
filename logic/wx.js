@@ -3,6 +3,8 @@ const utils = require('../utils/utils');
 const wxBase = require('../logic/wxBase');
 const xml2js = require('xml2js');
 const { __handleAPIRes, __mustValue, __handleRes } = require('../module/result');
+const userModel = require('../schema/user');
+
 
 /**
  * 验证URL接口
@@ -55,17 +57,17 @@ exports.analysisToken = async ctx => {
     const xmlCon = ctx.req.body.xml;
     let { ToUserName, FromUserName, CreateTime, MsgType, Content, MsgId, Encrypt, MediaId } = xmlCon;
     // // 拿到加密字符串
-    let encryptStr = ctx.req.body.xml.Encrypt[0];
+    // let encryptStr = ctx.req.body.xml.Encrypt[0];
 
 
-    // 开发者计算签名
-    let devMsgSignature = utils.sha1(config.wxConfig.Token, timestamp, nonce, encryptStr);
-    if (devMsgSignature !== msg_signature) {
-      // 如果不等于 则判断为不是微信发送过来的消息，
-      console.log('不是微信发送的');
-      return ctx.body = __handleAPIRes('error', 500);
-    }
-    console.log('是微信发送的');
+    // // 开发者计算签名
+    // let devMsgSignature = utils.sha1(config.wxConfig.Token, timestamp, nonce, encryptStr);
+    // if (devMsgSignature !== msg_signature) {
+    //   // 如果不等于 则判断为不是微信发送过来的消息，
+    //   console.log('不是微信发送的');
+    //   return ctx.body = __handleAPIRes('error', 500);
+    // }
+    // console.log('是微信发送的');
 
     // 在此处解密秘密字符串
 
@@ -153,7 +155,7 @@ exports.auth = async ctx => {
     }
 
     const { access_token, refresh_token, openid, scope } = getAuthResult;
-    console.log(access_token, refresh_token, openid, scope);
+    // console.log(access_token, refresh_token, openid, scope);
 
 
     // 3. 刷新access_token 如果需要
@@ -164,11 +166,98 @@ exports.auth = async ctx => {
     console.log('拉取到的用户信息为');
     console.log(userInfoResult);
 
+    let newInfo = {
+      openid: userInfoResult.openid,
+      nickname: userInfoResult.nickname,
+      sex: userInfoResult.sex,
+      language: userInfoResult.language,
+      city: userInfoResult.city,
+      province: userInfoResult.province,
+      country: userInfoResult.country,
+      headimgurl: userInfoResult.headimgurl,
+      privilege: JSON.stringify(userInfoResult.privilege)
+    }
+
+    let handleSaveResult = await new Promise((resolve, reject) => {
+      userModel.findOneAndUpdate({
+        openid: userInfoResult.openid
+      }, newInfo, {upsert: true, new: true, setDefaultsOnInsert: true}, function(err, result) {
+        if(err){
+          resolve(__handleRes(err, 400));
+        }
+        resolve(__handleRes(result));
+      })
+    });
+
+    if(handleSaveResult.status === 400){
+      return ctx.body = __handleAPIRes('服务器繁忙，请稍后再试');
+    }
+    // 执行成功了
+    console.log('查找或新增结果');
+    console.log(handleSaveResult);
+
+    
+    // // 判断数据库中是否存在此数据
+    // let searchUserResult = await new Promise((resolve, reject) => {
+    //   userModel.find({ openid: userInfoResult.openid }, (err, result) => {
+    //     if (err) {
+    //       resolve(__handleRes(err, 400));
+    //     }
+    //     resolve(__handleRes(result));
+    //   });
+    // });
+
+    // console.log('查询结果');
+    // if (searchUserResult.status === 400) {
+    //   return ctx.body = __handleAPIRes('查询过程出现错误', 400);
+    // }
+    // console.log('查询成功');
+    // console.log(searchUserResult);
+
+    // if (searchUserResult.data.length === 0) {
+    //   // 不存在
+    //   // 加入进去
+    //   let newUser = new userModel({
+    //     openid: userInfoResult.openid,
+    //     nickname: userInfoResult.nickname,
+    //     sex: userInfoResult.sex,
+    //     language: userInfoResult.language,
+    //     city: userInfoResult.city,
+    //     province: userInfoResult.province,
+    //     country: userInfoResult.country,
+    //     headimgurl: userInfoResult.headimgurl,
+    //     privilege: JSON.stringify(userInfoResult.privilege)
+    //   });
+    //   let saveResult = await new Promise((resolve, reject) => {
+    //     newUser.save((err, result) => {
+    //       if (err) {
+    //         resolve({ status: 400, con: err });
+    //       }
+    //       resolve({ status: 200, con: result });
+    //     })
+    //   });
+
+    //   if (saveResult.status === 400) {
+    //     console.log('数据保存失败');
+    //     return console.log(saveResult.con);
+    //   }
+
+    //   console.log('保存成功');
+    //   console.log(saveResult.con)
+
+    // } else {
+    //   // 存在了 更新信息
+    //   console.log('已经存在了');
+    //   userModel.update({
+        
+    //   })
+    // }
+
     ctx.body = __handleAPIRes({
       msg: '获取用户信息成功',
       userInfo: userInfoResult
     });
-    
+
   } catch (e) {
     console.log(e);
     ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);

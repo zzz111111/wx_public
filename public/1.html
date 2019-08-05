@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+
+
+    async function fn() {
+
+      try {
+        let reuslt = await new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject({
+              status: 400,
+              msg: '错误了'
+            });
+          }, 3000);
+        })
+        console.log('查询结果');
+        console.log(result);
+
+      } catch (err) {
+        console.log('错误了');
+        console.log(err);
+      }
+    }
+
+
+    fn();
+
+
+
+
+
+  </script>
+</body>
+
+</html>
