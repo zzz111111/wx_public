@@ -20,7 +20,6 @@ db.on('open', () => {
   console.log('mongodb数据库连接成功');
 });
 
-
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
