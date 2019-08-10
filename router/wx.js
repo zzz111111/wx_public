@@ -25,6 +25,9 @@ router.get('/server_ip_list', wxLogic.getServerIpList);
 // 自定义菜单查询接口
 router.get('/menu_list', wxLogic.getMenuList);
 
+// 获取客服模板
+router.get('/user_template', wxLogic.getTemplate);
+
 
 router.get('/wx/token', async ctx => {
   ctx.body = "wx token";

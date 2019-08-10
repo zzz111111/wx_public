@@ -170,6 +170,18 @@ module.exports = {
   },
 
   /**
+   * 获得模板客服模板id 
+   */
+  getTemplate(){
+    return axios({
+      url: 'https://api.weixin.qq.com/cgi-bin/template/api_add_template',
+      params: {
+        access_token: config.wxConfig.access_token
+      }
+    });
+  },
+
+  /**
    * 发送消息 目前没有拓展那么多 都是一样的原理 目前只支持 图片 文本 语音 图文消息
    * @params {Object} obj
    *  obj.ToUserName {String} 发送给谁 粉丝号

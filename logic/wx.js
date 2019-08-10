@@ -181,22 +181,22 @@ exports.auth = async ctx => {
     let handleSaveResult = await new Promise((resolve, reject) => {
       userModel.findOneAndUpdate({
         openid: userInfoResult.openid
-      }, newInfo, {upsert: true, new: true, setDefaultsOnInsert: true}, function(err, result) {
-        if(err){
+      }, newInfo, { upsert: true, new: true, setDefaultsOnInsert: true }, function (err, result) {
+        if (err) {
           resolve(__handleRes(err, 400));
         }
         resolve(__handleRes(result));
       })
     });
 
-    if(handleSaveResult.status === 400){
+    if (handleSaveResult.status === 400) {
       return ctx.body = __handleAPIRes('服务器繁忙，请稍后再试');
     }
     // 执行成功了
     console.log('查找或新增结果');
     console.log(handleSaveResult);
 
-    
+
     // // 判断数据库中是否存在此数据
     // let searchUserResult = await new Promise((resolve, reject) => {
     //   userModel.find({ openid: userInfoResult.openid }, (err, result) => {
@@ -249,7 +249,7 @@ exports.auth = async ctx => {
     //   // 存在了 更新信息
     //   console.log('已经存在了');
     //   userModel.update({
-        
+
     //   })
     // }
 
@@ -320,6 +320,21 @@ exports.getMenuList = async ctx => {
   try {
     console.log('自定义菜单查询');
     let result = await wxBase.getMenu();
+    console.log(result);
+    ctx.body = __handleAPIRes(result);
+  } catch (e) {
+    console.log(e);
+    ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
+  }
+};
+
+/**
+ * 获取客服模板列表
+ */
+exports.getTemplate = async ctx => {
+  try {
+    console.log('自定义菜单查询');
+    let result = await wxBase.getTemplate();
     console.log(result);
     ctx.body = __handleAPIRes(result);
   } catch (e) {

@@ -6,7 +6,7 @@ module.exports = {
     // AppSecret: '0ba36024d0ec037d5a704ef25651b189',
     Token: 'zhangyachang', // 自行配置的token
 
-    // 测试号申请 获得更多权限
+    // // 测试号申请 获得更多权限
     AppID: 'wx5910ab0a942c1030',
     AppSecret: 'ecaac754f1048f693b0b9e05c8c15d10',
     // 测试号申请的id

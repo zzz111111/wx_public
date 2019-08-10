@@ -45,6 +45,14 @@
   <script>
     (function () {
       // 拿到当前的网址去请求 签名配置信息
+      
+      // console.log('请求的列表信息');
+      // console.log(window.location.href.split('#')[0]);
+      
+      // let url = window.location.href.split('#')[0].split('//')[1];
+      // console.log(url);
+
+
       axios({
         url: 'http://wxgz.xiaoye121.com/wx/signature',
         method: 'POST',
