@@ -342,3 +342,8 @@ exports.getTemplate = async ctx => {
     ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
   }
 };
+
+/**
+ * 可以加入微信支付吗
+ * 需要营业执照什么的，如果没有的话可以尝试调取接口吗。
+ */
