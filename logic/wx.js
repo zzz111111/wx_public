@@ -3,7 +3,7 @@ const utils = require('../utils/utils');
 const wxBase = require('../logic/wxBase');
 const xml2js = require('xml2js');
 const { __handleAPIRes, __mustValue, __handleRes } = require('../module/result');
-const userModel = require('../schema/user');
+const db = require('../schema/index');
 
 
 /**
@@ -179,7 +179,7 @@ exports.auth = async ctx => {
     }
 
     let handleSaveResult = await new Promise((resolve, reject) => {
-      userModel.findOneAndUpdate({
+      db.userModel.findOneAndUpdate({
         openid: userInfoResult.openid
       }, newInfo, { upsert: true, new: true, setDefaultsOnInsert: true }, function (err, result) {
         if (err) {
