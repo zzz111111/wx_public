@@ -13,30 +13,73 @@
 
 
     async function fn() {
-
-      try {
-        let reuslt = await new Promise((resolve, reject) => {
-          setTimeout(() => {
-            reject({
-              status: 400,
-              msg: '错误了'
-            });
-          }, 3000);
+      let result = await p1()
+        .catch(err => {
+          console.log('捕获错误');
+          console.log(err);
         })
-        console.log('查询结果');
-        console.log(result);
 
-      } catch (err) {
-        console.log('错误了');
-        console.log(err);
-      }
+      console.log(result);
+    }
+
+    async function asy1() {
+
+    };
+
+
+
+
+
+
+
+
+
+
+    let p1 = () => {
+      return new Promise((resolve, reject) => {
+        resolve({status: 200, msg: '成功'});
+        // setTimeout(() => {
+        //   resolve({
+        //     status: 400,
+        //     msg: '错误了'
+        //   });
+        // }, 3000);
+      });
+    };
+
+    async function asy2() {
+      console.log('2执行'); //2
+      console.log('等待p1执行前');//3
+      // let result = await p1();
+      let result = await 1;
+      console.log('p1执行完成');
+
+      console.log(result);
+      return 'asy2的结果';
+    };
+
+    async function asy3() {
+      console.log('3执行');//4
+      let result = await 3;
+      console.log(result);//5
+      return 'asy3的结果';
+    };
+
+    async function fn1() {
+      console.log('fn1第一行');
+      let a1 = await asy2();
+      let a2 = await asy3();
+      console.log('a1 = ' + a1);
+      console.log('a2 = ' + a2);
+      console.log('fn1结束');
     }
 
 
-    fn();
+    let a = fn1();
+    console.log('打印a是什么');
+    console.log(a);
 
-
-
+    // 
 
 
   </script>

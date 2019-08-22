@@ -1,10 +1,8 @@
 const config = require('../config/config');
 const utils = require('../utils/utils');
 const wxBase = require('../logic/wxBase');
-const xml2js = require('xml2js');
 const { __handleAPIRes, __mustValue, __handleRes } = require('../module/result');
 const db = require('../schema/index');
-
 
 /**
  * 验证URL接口
@@ -347,3 +345,20 @@ exports.getTemplate = async ctx => {
  * 可以加入微信支付吗
  * 需要营业执照什么的，如果没有的话可以尝试调取接口吗。
  */
+
+
+
+/**
+ * 测试上传数组
+ */
+exports.testArrary = async ctx => {
+  try{
+    console.log('接收到请求数据');
+    console.log(ctx.request.body);
+
+    ctx.body = ctx.request.body;
+  }catch(e){
+    console.log(e);
+    ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
+  }
+};

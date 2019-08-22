@@ -28,6 +28,9 @@ router.get('/menu_list', wxLogic.getMenuList);
 // 获取客服模板
 router.get('/user_template', wxLogic.getTemplate);
 
+// 测试使用postman上传数组
+router.post('/test_arr', wxLogic.testArrary);
+
 
 router.get('/wx/token', async ctx => {
   ctx.body = "wx token";
