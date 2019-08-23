@@ -1,6 +1,6 @@
 const config = require('../config/config');
 const utils = require('../utils/utils');
-const wxBase = require('../logic/wxBase');
+const wxBase = require('./wxBase');
 const { __handleAPIRes, __mustValue, __handleRes } = require('../module/result');
 const db = require('../schema/index');
 
