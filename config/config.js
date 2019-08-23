@@ -20,6 +20,7 @@ module.exports = {
 
   zfbConfig: {
     app_id: '2019081566247460',
+    
 
     // 支付宝的私钥
     /*
