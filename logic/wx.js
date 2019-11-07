@@ -2,7 +2,7 @@ const config = require('../config/config');
 const utils = require('../utils/utils');
 const wxBase = require('./wxBase');
 const { __handleAPIRes, __mustValue, __handleRes } = require('../module/result');
-const db = require('../schema/index');
+// const db = require('../schema/index');
 
 /**
  * 验证URL接口
@@ -135,18 +135,24 @@ exports.getAccess_token = async ctx => {
  */
 exports.auth = async ctx => {
   try {
+
     console.log('auth回调函数域名');
     // 1. 用户授权后获取code
-    console.log('获取到的url请求');
-    console.log(ctx.query);
-    const { code, state } = ctx.query;
+    console.log('获取到的url请求', ctx.query);
+    const { code, state, shareUrl } = ctx.query;
     console.log(code, state);
 
     // 2. 通过code换取 access_token
     let getAuthResult = await wxBase.getAuthorizationAccess_token(code);
-    console.log('获取到的结果');
-    console.log(getAuthResult);
+    console.log('获取到的结果', getAuthResult);
+    // console.log('这个重定向连接是什么', '/exhibition#?openid=' + getAuthResult.openid + '&shareUrl=' + encodeURIComponent(shareUrl));
+    if (shareUrl) {
+      ctx.redirect('/exhibition#?openid=' + getAuthResult.openid + '&shareUrl=' + encodeURIComponent(shareUrl));
+    } else {
+      ctx.redirect('/exhibition#?openid=' + getAuthResult.openid);
+    }
 
+    return;
     if (getAuthResult.errcode) {
       // 
       return ctx.body = __handleAPIRes('获取token失败');
@@ -352,12 +358,12 @@ exports.getTemplate = async ctx => {
  * 测试上传数组
  */
 exports.testArrary = async ctx => {
-  try{
+  try {
     console.log('接收到请求数据');
     console.log(ctx.request.body);
 
     ctx.body = ctx.request.body;
-  }catch(e){
+  } catch (e) {
     console.log(e);
     ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
   }

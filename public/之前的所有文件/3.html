@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    
+
+    axios({
+      method: 'POST',
+      url: 'http://192.168.13.6:8002/zfb/testnull',
+      params: {
+        api: '123123',
+        get11: 'ss'
+      },
+      data: {
+        post1: '',
+        post2: '发送内容'
+      }
+    })
+      .then(res => {
+        console.log('成功');
+        console.log(res)
+      })
+      .catch(err => {
+        console.log('错误');
+        console.log(err);
+      });
+
+  </script>
+</body>
+</html>

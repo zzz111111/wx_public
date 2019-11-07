@@ -46,6 +46,9 @@ module.exports = {
     console.log('刷新jsapi_ticket成功');
     config.wxConfig.jsapi_ticket = jsapi_ticketResult.ticket;
 
+    console.log('查看获取内容');
+    console.log(config.wxConfig);
+
     // 获取完成之后请求微信卡卷的 api_ticket 并刷新
     let api_ticketResult = await this.getApi_ticket();
     // console.log('获取的微信卡卷的结果为');

@@ -1,9 +1,10 @@
 module.exports = {
-  port: 8002,
+  // port: 8002,
+  port: 7021,
 
   wxConfig: {
-    // AppID: 'wxcacd35d40eeb1b09',
-    // AppSecret: '0ba36024d0ec037d5a704ef25651b189',
+    // AppID: 'wx5910ab0a942c1030',
+    // AppSecret: 'ecaac754f1048f693b0b9e05c8c15d10',
     Token: 'zhangyachang', // 自行配置的token
 
     // // 测试号申请 获得更多权限
@@ -20,7 +21,7 @@ module.exports = {
 
   zfbConfig: {
     app_id: '2019081566247460',
-    
+
 
     // 支付宝的私钥
     /*

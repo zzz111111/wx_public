@@ -6,11 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <style>
+    #box {
+      width: 200px;
+      height: 200px;
+      border: 1px solid red;
+    }
+  </style>
 </head>
 
 <body>
+
+  <div id="box"></div>
   <script>
 
+    var oBox = document.getElementById('box');
+    oBox.style.color = 'red';
+
+
+    oBox.style.backgroundImage = 'url("https://static.clewm.net/cli/images/cli_logo.png")';
 
     async function fn() {
       let result = await p1()
@@ -29,7 +43,7 @@
 
     let p1 = () => {
       return new Promise((resolve, reject) => {
-        resolve({status: 200, msg: '成功'});
+        resolve({ status: 200, msg: '成功' });
         // setTimeout(() => {
         //   resolve({
         //     status: 400,
@@ -73,6 +87,39 @@
 
     //  fn1第一行  2执行 等待p1执行前 打印a是什么 promisependding  p1执行完成 1  3执行  3  asy2的结果 asy3的结果 fn1结束
 
+    console.log('矿泉水 ===> ', encodeURIComponent('https://wx.zplus.top/a/DM_76341841651241'));
+    console.log('店铺吗 ===> ', encodeURIComponent('https://wx.zplus.top/a/?licenseNo=3767'));
+    console.log('付款码 ===> ', encodeURIComponent('https://wx.zplus.top/a/?p=205c990a3eecd746f3af940aceb8c6a5c65bcae85aa5aca14070e4a90414a2e3'));
+    console.log('付款码 ===> ', encodeURIComponent('https://wx.zplus.top/a/?p=0a22ac5e319368d801e105c981119d1e11295729c9798fe39467782c2bd00f3e'));
+
+
+
+    let str = '怡宝350ML'
+    console.log('正则验证===>', /怡宝/g.test(str));
+
+
+
+    /*
+       扫码购  需要加入一个根据设备SN号去查询门店id的接口
+    
+       现在的这个设备id为  MLAT1A2019811000327  换取的门店id为  3767
+      */
+
+
+
+
+
+/*
+  新开发接口的时候，如果兼容两个版本的容易可以兼容一下。
+
+  如果不容易兼容可以在 最后面加上一个版本标识，线上的版本还是用的这个，等发布之后可以把旧版的删掉
+  192.168.12.56:7031/zero-box/mall?api=zero.box.mall.get_section
+  192.168.12.56:7031/zero-box/mall?api=zero.box.mall.get_sectionv1
+  192.168.12.56:7031/zero-box/mall?api=zero.box.mall.get_sectionv2
+*/
+
+
+   
 
   </script>
 </body>

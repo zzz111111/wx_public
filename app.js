@@ -2,6 +2,7 @@ const Koa = require('koa');
 const logger = require('koa-logger');
 const koaBody = require('koa-body');
 const koaStatic = require('koa-static');
+// const httpProxy = require('http-proxy-middleware');
 const app = new Koa();
 const server = require('http').createServer(app.callback());
 const path = require('path');
@@ -29,7 +30,7 @@ app.use(koaBody({
 app.use(koaStatic(path.join(__dirname, 'public')));
 
 // 初始化微信
-// wxBase.init();
+wxBase.init();
 
 zfbBase.init();
 

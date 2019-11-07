@@ -15,7 +15,6 @@ module.exports = {
   },
 
 
-
   getOpenid() {
     console.log('获取用户的openid');
 
