@@ -130,6 +130,8 @@ exports.getAccess_token = async ctx => {
   }
 };
 
+
+// 展会的一点东西
 /**
  * 微信的auth2.0验证
  */
@@ -264,6 +266,170 @@ exports.auth = async ctx => {
 
   } catch (e) {
     console.log(e);
+    ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
+  }
+};
+
+
+/**
+ * 云烟微信的auth2.0验证
+ */
+exports.authYN = async ctx => {
+  try {
+
+    console.log('auth回调函数域名');
+    // 1. 用户授权后获取code
+    console.log('获取到的url请求', ctx.query);
+    const { code, state, shareUrl } = ctx.query;
+    console.log(code, state);
+
+    // 2. 通过code换取 access_token
+    let getAuthResult = await wxBase.getAuthorizationAccess_token(code);
+    console.log('获取到的结果', getAuthResult);
+    // console.log('这个重定向连接是什么', '/exhibition#?openid=' + getAuthResult.openid + '&shareUrl=' + encodeURIComponent(shareUrl));
+
+    ctx.redirect('/smg#?openid=' + getAuthResult.openid + '&access_token=' + getAuthResult.access_token);
+    // if (shareUrl) {
+    //   ctx.redirect('/exhibition#?openid=' + getAuthResult.openid + '&shareUrl=' + encodeURIComponent(shareUrl));
+    // } else {
+    //   ctx.redirect('/exhibition#?openid=' + getAuthResult.openid);
+    // }
+
+    return;
+    if (getAuthResult.errcode) {
+      // 
+      return ctx.body = __handleAPIRes('获取token失败');
+    }
+
+    const { access_token, refresh_token, openid, scope } = getAuthResult;
+    // console.log(access_token, refresh_token, openid, scope);
+
+
+    // 3. 刷新access_token 如果需要
+
+
+    // 4. 拉取用户信息(需scope为 snsapi_userinfo)
+    let userInfoResult = await wxBase.gerUserInfoByOpenid({ access_token, openid });
+    console.log('拉取到的用户信息为');
+    console.log(userInfoResult);
+
+    return;
+
+    let newInfo = {
+      openid: userInfoResult.openid,
+      nickname: userInfoResult.nickname,
+      sex: userInfoResult.sex,
+      language: userInfoResult.language,
+      city: userInfoResult.city,
+      province: userInfoResult.province,
+      country: userInfoResult.country,
+      headimgurl: userInfoResult.headimgurl,
+      privilege: JSON.stringify(userInfoResult.privilege)
+    }
+
+    let handleSaveResult = await new Promise((resolve, reject) => {
+      db.userModel.findOneAndUpdate({
+        openid: userInfoResult.openid
+      }, newInfo, { upsert: true, new: true, setDefaultsOnInsert: true }, function (err, result) {
+        if (err) {
+          resolve(__handleRes(err, 400));
+        }
+        resolve(__handleRes(result));
+      })
+    });
+
+    if (handleSaveResult.status === 400) {
+      return ctx.body = __handleAPIRes('服务器繁忙，请稍后再试');
+    }
+    // 执行成功了
+    console.log('查找或新增结果');
+    console.log(handleSaveResult);
+
+
+    // // 判断数据库中是否存在此数据
+    // let searchUserResult = await new Promise((resolve, reject) => {
+    //   userModel.find({ openid: userInfoResult.openid }, (err, result) => {
+    //     if (err) {
+    //       resolve(__handleRes(err, 400));
+    //     }
+    //     resolve(__handleRes(result));
+    //   });
+    // });
+
+    // console.log('查询结果');
+    // if (searchUserResult.status === 400) {
+    //   return ctx.body = __handleAPIRes('查询过程出现错误', 400);
+    // }
+    // console.log('查询成功');
+    // console.log(searchUserResult);
+
+    // if (searchUserResult.data.length === 0) {
+    //   // 不存在
+    //   // 加入进去
+    //   let newUser = new userModel({
+    //     openid: userInfoResult.openid,
+    //     nickname: userInfoResult.nickname,
+    //     sex: userInfoResult.sex,
+    //     language: userInfoResult.language,
+    //     city: userInfoResult.city,
+    //     province: userInfoResult.province,
+    //     country: userInfoResult.country,
+    //     headimgurl: userInfoResult.headimgurl,
+    //     privilege: JSON.stringify(userInfoResult.privilege)
+    //   });
+    //   let saveResult = await new Promise((resolve, reject) => {
+    //     newUser.save((err, result) => {
+    //       if (err) {
+    //         resolve({ status: 400, con: err });
+    //       }
+    //       resolve({ status: 200, con: result });
+    //     })
+    //   });
+
+    //   if (saveResult.status === 400) {
+    //     console.log('数据保存失败');
+    //     return console.log(saveResult.con);
+    //   }
+
+    //   console.log('保存成功');
+    //   console.log(saveResult.con)
+
+    // } else {
+    //   // 存在了 更新信息
+    //   console.log('已经存在了');
+    //   userModel.update({
+
+    //   })
+    // }
+
+    ctx.body = __handleAPIRes({
+      msg: '获取用户信息成功',
+      userInfo: userInfoResult
+    });
+
+  } catch (e) {
+    console.log(e);
+    ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
+  }
+};
+
+/**
+ * 根据openid换取用户信息
+ */
+exports.openid2user = async ctx => {
+  try {
+    let { openid, access_token } = ctx.query;
+    console.log('openid换取用户信息', openid);
+    // let { access_token } = config.wxConfig;
+    // console.log('传递的什么参数', { access_token, openid });
+    let userInfoResult = await wxBase.gerUserInfoByOpenid({ access_token, openid });
+    console.log('拉取到的用户信息为');
+    console.log(userInfoResult);
+
+    ctx.body = { data: userInfoResult, status: 75200 };
+
+  } catch (e) {
+    console.log('报错了', e);
     ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
   }
 };

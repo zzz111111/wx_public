@@ -17,7 +17,10 @@ router.get('/access_token', wxLogic.getAccess_token);
 router.post('/signature', wxLogic.getSignature);
 
 // 微信接口请求的auth2.0获取用户code去获取用户的openid
-router.get('/auth', wxLogic.auth);
+router.get('/auth', wxLogic.authYN);
+
+// 微信接口中通过openid换取用户信息的接口
+router.get('/openid2user', wxLogic.openid2user);
 
 // 获取微信服务器Ip地址
 router.get('/server_ip_list', wxLogic.getServerIpList);
@@ -32,7 +35,7 @@ router.get('/user_template', wxLogic.getTemplate);
 router.post('/test_arr', wxLogic.testArrary);
 
 
-router.get('/wx/token', async ctx => {
+router.get('/token', async ctx => {
   ctx.body = "wx token";
 });
 
