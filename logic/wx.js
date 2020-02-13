@@ -1,8 +1,39 @@
 const config = require('../config/config');
 const utils = require('../utils/utils');
 const wxBase = require('./wxBase');
+
+const url = require('url');
+
 const { __handleAPIRes, __mustValue, __handleRes } = require('../module/result');
 // const db = require('../schema/index');
+
+
+// let url1 = `http://hyhh.zplus.top/scp?openid=o77Y-wvJEbGTvDqWjhwbDnYmak0w&access_token=27_ChLFcd2vuyo10HZqAKc425lGzlvXikGU4dUQaRntZdfp5HZiHD4nqSCPShxoKjGyyEb44qs8HsSNFZF2fzxh1Q&state=https://hyhh.zplus.top/scp?id=Ku9HFTaGkTIhB227#/`;
+// let parseUrl = url1.split('?')[1];
+// parseUrl = '?' + parseUrl;
+
+
+
+// console.log('打印要切割的字符串');
+// console.log('打印切割完成之后', url.parse(parseUrl, true).query)
+
+// let url2 = `http://hyhh.zplus.top/scp?id=/93/J5smmhkkJ7jSR270#/`;
+// let parseUrl2 = url2.split('?')[1];
+// parseUrl2 = '?' + parseUrl2;
+// console.log('parseUrl2==>', url.parse(parseUrl2, true).query);
+
+
+// let url3 = `http://hyhh.zplus.top/scp/#/?openid=o77Y-wvJEbGTvDqWjhwbDnYmak0w&access_token=27_aosXTDGzcaVR11D3oaNtPPG1vldqsYuHVRqoFQ_-QIs1BvE9kc5RzopxQiF_fi7qwIH76F4T_9T7xBWxjQyEqQ&state=https://hyhh.zplus.top/scp?p=512e668d5a783eec53e5b293ef7dc353d6056abddf51c76aa3f7ebf59645b4ca#/`;
+// let url3 = `http://hyhh.zplus.top/scp/#/?openid=o77Y-wvJEbGTvDqWjhwbDnYmak0w&access_token=27_KHjp61Pe01LIfx6UH5KhBu-MuYQeb6C7JVrDVp2oalzaJdJpPrXIP68aUwximSXb-QYSk2-ztvXOxclq7v5ouA&state=%2F91%2Fc1ZZMRwl9iz9q304`;
+// let { openid, access_token, state, id } = url.parse('?' + url3.split('?')[1]);
+// console.log('这个东西是什么', url3.split('?')[2] && url3.split('?')[2].split('#')[0]);
+
+// let obj = url.parse('?' + url3.split('?')[1], true).query;
+
+// console.log('现在的', obj);
+
+// console.log('openid ')
+
 
 /**
  * 验证URL接口
@@ -36,6 +67,21 @@ exports.checkToken = async ctx => {
     ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
   }
 };
+
+
+
+/*
+我传过去的go_url 是这个 go_url=http://hyhh.zplus.top/scp#?qr=http://qr.ynzyiot.com/93/Ku9HFTaGkTIhB227
+
+
+http://hyhh.zplus.top/scp#?openid=o77Y-wvJEbGTvDqWjhwbDnYmak0w&access_token=27_X7GfGlUj6i0GZwirKUbQmt5z4ZVlYTa34cgEBqerAsw1e5VcfK4m3q4NRVh5_-PWj4zh_hc6lRpHd6R3FRT8UA#/?qr=http%3A%2F%2F220.165.250.147%2Fscp
+
+http://hyhh.zplus.top/scp?openid=o77Y-wvJEbGTvDqWjhwbDnYmak0w&access_token=27_XtTHL9DTQvFVF1Ft27Dn1NnRQO4NG1uXqk6Ue88z_a6rVseSXBStJBYfa1MVzuAbwxnv5HT2k5-ZPcH5KZRcJA#/?qr=http%3A%2F%2F220.165.250.147%2Fscp#/
+
+*/
+
+
+
 
 /**
  * POST解析用户发送来的消息
@@ -121,6 +167,10 @@ exports.analysisToken = async ctx => {
 exports.getAccess_token = async ctx => {
   try {
     console.log('获取当前的access_token');
+    console.log(ctx);
+    console.log(ctx.query);
+    console.log(ctx.request.body);
+    
     ctx.body = __handleAPIRes({
       access_token: config.wxConfig.access_token
     });
@@ -280,7 +330,7 @@ exports.authYN = async ctx => {
     console.log('auth回调函数域名');
     // 1. 用户授权后获取code
     console.log('获取到的url请求', ctx.query);
-    const { code, state, shareUrl } = ctx.query;
+    const { code, state, qr } = ctx.query;
     console.log(code, state);
 
     // 2. 通过code换取 access_token
@@ -288,12 +338,12 @@ exports.authYN = async ctx => {
     console.log('获取到的结果', getAuthResult);
     // console.log('这个重定向连接是什么', '/exhibition#?openid=' + getAuthResult.openid + '&shareUrl=' + encodeURIComponent(shareUrl));
 
-    ctx.redirect('/smg#?openid=' + getAuthResult.openid + '&access_token=' + getAuthResult.access_token);
-    // if (shareUrl) {
-    //   ctx.redirect('/exhibition#?openid=' + getAuthResult.openid + '&shareUrl=' + encodeURIComponent(shareUrl));
-    // } else {
-    //   ctx.redirect('/exhibition#?openid=' + getAuthResult.openid);
-    // }
+    // ctx.redirect('/smg#?openid=' + getAuthResult.openid + '&access_token=' + getAuthResult.access_token +'&qr=' + qr);
+    if (shareUrl) {
+      ctx.redirect('/exhibition#?openid=' + getAuthResult.openid + '&shareUrl=' + encodeURIComponent(shareUrl));
+    } else {
+      ctx.redirect('/exhibition#?openid=' + getAuthResult.openid);
+    }
 
     return;
     if (getAuthResult.errcode) {
@@ -426,11 +476,37 @@ exports.openid2user = async ctx => {
     console.log('拉取到的用户信息为');
     console.log(userInfoResult);
 
-    ctx.body = { data: userInfoResult, status: 75200 };
+    ctx.body = { data: userInfoResult, statusCode: 75200 };
 
   } catch (e) {
     console.log('报错了', e);
     ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
+  }
+};
+
+/**
+ * 通过openid2UnionUser
+ */
+exports.openid2UnionUser = async (ctx) => {
+  try {
+    console.log('请求到了我');
+    let {openid} = ctx.query;
+
+    let userInfo = await wxBase.getUserInfo(openid);
+    console.log('获取的用户信息', userInfo);
+    ctx.body = {
+      code: 0,
+      data: userInfo,
+      msg: 'ok'
+    };
+
+  } catch (e) {
+    console.log('报错了', e);
+    ctx.body = {
+      code: -1,
+      msg: '获取失败',
+      data: ""
+    };
   }
 };
 
@@ -517,6 +593,15 @@ exports.getTemplate = async ctx => {
  * 可以加入微信支付吗
  * 需要营业执照什么的，如果没有的话可以尝试调取接口吗。
  */
+
+
+
+// 27_Gsj9KRPaxNwocy22aJqKxGY1WwQcPrboWdCrvrEUAO4CJM5GLyUpwNndmvNmmCdLk5YtUwwRn6uAE6FDNU0t-A
+// 27_2Nna11qQZN_8tGzyK-9zxbefFZJsbGiu1K0ddw0h-8iihQMDxQ6nB2eLHGVzbvXV1pD2JZEj6YfmX_e-o-Rwpw
+
+http://hyhh.zplus.top/scp?openid=o77Y-wvJEbGTvDqWjhwbDnYmak0w&access_token=&state=http://220.165.250.147/scp#/
+
+
 
 
 

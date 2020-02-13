@@ -7,115 +7,266 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      height: 5000px;
+      background-color: skyblue;
+    }
+
+    #imgwrap img {
+      width: 200px;
     }
   </style>
 </head>
 
 <body>
+  3000端口子页面
 
-  <h1 id="h1">点击按钮</h1>
+  <a href="http://192.168.12.233:3000/b.html">跳转到b.html</a>
+
+  <h1 id="btn">获取通讯录</h1>
+
+  <h1 id="btn1">选择通讯录H5</h1>
+
+  <h1 id="img">选择相册</h1>
+  <h1 id="title">修改页面标题</h1>
+  <img id="img1" src="" alt="">
+
+  <h1 id="preview">预览图片</h1>
+  <img src="http://192.168.11.160/zero-box/file/img/a91e3c80-32b2-11ea-8b79-4b01ce5cd82f.png" alt="">
+
+  <div id="txt"></div>
+
+  <div id="imgwrap">
+  </div>
+
+  <input type="file" value="选择图片">
+
+  <script src="./js/vconsole.js"></script>
 
   <script>
-
-    const permission = Notification.permission;
-
-    console.dir(Notification);
-    console.log('授权状态===>', permission);
-
-    if (permission === 'granted') {
-      console.log('已经授权通知，可以进行你的通知啦！');
-      // notificationCallback();
-    } else {
-      console.log('用户还未授权，请先授权！');
-    }
-
-    document.getElementById('h1').addEventListener('click', function () {
-      Notification.requestPermission()
-        .then(permission => {
-          if (permission === 'granted') {
-            console.log('同意了');
-            notificationCallback();
-
-          } else if (permission === 'default') {
-            console.log('拒绝了');
-          }
-        })
-    });
-
-
-
-    var notificationCallback = function () {
-      console.log('执行了通知回调函数 3000ms后触发');
-      setTimeout(() => {
-        console.log('提醒触发了吗');
-
-        new Notification('你有一条新消息待读取', {
-          body: '你的好友XX上线了！'
-        });
-      }, 3000);
-    };
-    // let timer = 3000;
-
-
-
-
-    // const NotificationInstance = Notification || window.Notification;
-    // if (!!NotificationInstance) {
-    //   const permissionNow = NotificationInstance.permission;
-    //   if (permissionNow === 'granted') {//允许通知
-    //     CreatNotification();
-    //   } else if (permissionNow === 'denied') {
-    //     console.log('用户拒绝了你!!!');
-    //   } else {
-    //     console.log('permission是什么', permissionNow);
-    //     setPermission();
-    //   }
-    //   function setPermission() {
-    //     //请求获取通知权限
-    //     NotificationInstance.requestPermission(function (PERMISSION) {
-    //       if (PERMISSION === 'granted') {
-    //         CreatNotification();
-    //       } else {
-    //         console.log('用户无情残忍的拒绝了你!!!');
-    //       }
-    //     });
-    //   }
-    //   function CreatNotification() {
-    //     const n = new NotificationInstance('XX网站消息通知', {
-    //       body: '你的朋友有新状态啦，快去围观吧！',
-    //       tag: '2ue',
-    //       icon: 'https://2ue.github.io/images/common/avatar.png',
-    //       data: {
-    //         url: 'https://2ue.github.io'
-    //       }
-    //     });
-    //     n.onshow = function () {
-    //       console.log('通知显示了！');
-    //     }
-    //     n.onclick = function (e) {
-    //       //可以直接通过实例的方式获取data内自定义的数据
-    //       //也可以通过访问回调参数e来获取data的数据
-    //       window.open(n.data.url, '_blank');
-    //       n.close();
-    //     }
-    //     n.onclose = function () {
-    //       console.log('你墙壁了我！！！');
-    //     }
-    //     n.onerror = function (err) {
-    //       console.log('出错了，小伙子在检查一下吧');
-    //       throw err;
-    //     }
-    //     setTimeout(() => {
-    //       n.close();
-    //     }, 2000);
-    //   }
-    // }
-
+    new VConsole()
   </script>
 
+  <script src="./hl-sdk.js"></script>
+  <script>
 
+    // console.log(HL);
+    // (function () {
+    //   // console.log('子页面的初始化函数已经执行');
+    //   HL.mail({
+    //     api: 'hl.sdk.mail',
+    //     data: {
+    //       hlappid: '5e071967f58d815cace2bd79',
+    //     },
+    //     success: function (msg) {
+    //       console.log('调用成功之后的返回值----------------开始执行自己的操作逻辑------', msg);
+    //       document.body.innerHTML = `我取得的父页面的消息   ${JSON.stringify(msg)}`;
+    //     }
+    //   });
+    // })();
+
+    var oBtn = document.getElementById('btn');
+    var oImg = document.getElementById('img');
+    var oTxt = document.getElementById('txt');
+
+    document.getElementById('btn1').onclick = function () {
+      alert('选择H5的通讯录');
+      HL.mail({
+        api: 'hl.sdk.mail',
+        data: {
+          hlappid: '5e16d7d7552de19c9ba05139',
+          multiple: true,
+          startWithDepartmentId: 0,
+          type: ['department', 'user'],
+
+          // selectionOrder: ["5e0b817b57aca8280456bd80", "5e0c60b92872659ab8688b63", "5e0b822b57aca8280456bda2"],
+          // pickedUsers: [
+          //   {
+          //     _id: "5e0c60b92872659ab8688b63",
+          //     id: "zhangyachang",
+          //     name: "张亚昌",
+          //     avatar: "http://wework.qpic.cn/bizmail/kD2bQlOgwhUP9M2NIGW9uh36pQibNk20e4uNehxVmdR2FrtVicB6yiaeA/0",
+          //     type: "user"
+          //   }
+          // ],
+          // "pickedDepartments": [
+          //   {
+          //     _id: "5e0b817b57aca8280456bd80",
+          //     id: "12540",
+          //     name: "曲靖卷烟厂1"
+          //   },
+          //   {
+          //     _id: "5e0b822b57aca8280456bda2",
+          //     id: "10",
+          //     name: "测试部门"
+          //   }
+          // ],
+          
+          // pickedDepartments: [
+          //   {
+          //     _id: "5e0b822b57aca8280456bda2",
+          //     id: "10",
+          //     name: "测试部门",
+          //     
+          //   }
+          // ]
+        },
+        success: function (msg) {
+          alert('调取成功之后的返回值');
+          alert(JSON.stringify(msg));
+          console.log('调取成功之后的返回值');
+          console.log(msg);
+          // console.log('调用成功之后的返回值----------------开始执行自己的操作逻辑------', msg);
+
+          oTxt.innerHTML = `我取得的父页面的消息   ${JSON.stringify(msg)}`;
+        }
+      });
+    };
+
+    let result = {
+      departmentList: [
+        {
+          _id: "5e0b817b57aca8280456bd80",
+          id: "12540",
+          name: "曲靖卷烟厂1",
+          type: "dep"
+        },
+        {
+          _id: "5e0b822b57aca8280456bda2",
+          id: "10",
+          name: "测试部门",
+          type: "dep",
+        }
+      ],
+      selectid: ["5e0b817b57aca8280456bd80", "5e0c60b92872659ab8688b63", "5e0b822b57aca8280456bda2"],
+      userList: [
+        {
+          _id: "5e0c60b92872659ab8688b63",
+          id: "zhangyachang",
+          name: "张亚昌",
+          avatar: "http://wework.qpic.cn/bizmail/kD2bQlOgwhUP9M2NIGW9uh36pQibNk20e4uNehxVmdR2FrtVicB6yiaeA/0",
+          type: "user"
+        }
+      ]
+    }
+
+
+    var deuser = {
+      departmentList: [
+        {
+          _id: "5e0b817b57aca8280456bd80",
+          id: "12540",
+          name: "曲靖卷烟厂1",
+          type: "dep"
+        },
+        {
+          _id: "5e0b822b57aca8280456bda2",
+          id: "10",
+          name: "测试部门",
+          type: "dep",
+        }
+      ],
+      selectid: ["5e0b817b57aca8280456bd80", "5e0c60b92872659ab8688b63", "5e0b822b57aca8280456bda2"],
+      userList: [
+        {
+          _id: "5e0c60b92872659ab8688b63",
+          id: "zhangyachang",
+          name: "张亚昌",
+          avatar: "http://wework.qpic.cn/bizmail/kD2bQlOgwhUP9M2NIGW9uh36pQibNk20e4uNehxVmdR2FrtVicB6yiaeA/0",
+          type: "user"
+        }
+      ]
+    }
+
+
+
+
+
+
+
+
+
+
+
+    oBtn.onclick = function () {
+      HL.mail({
+        api: 'hl.sdk.mail',
+        data: {
+          hlappid: '5e16d7d7552de19c9ba05139',
+          multiple: true,
+          startWithDepartmentId: 0,
+          type: ['user', 'department']
+        },
+        success: function (msg) {
+          alert('调取成功之后的返回值');
+          console.log('调用成功之后的返回值----------------开始执行自己的操作逻辑------', msg);
+          oTxt.innerHTML = `我取得的父页面的消息   ${JSON.stringify(msg)}`;
+        }
+      });
+    };
+
+    // 统一参数格式
+    var obj = {
+      departmentList: [],
+      userList: [
+        { id: 'zgejianhui', name: '葛建辉', avatar: 'http地址' }
+      ]
+    };
+
+    oImg.onclick = function () {
+      alert('选择头像');
+      HL.chooseImage({
+        api: 'hl.sdk.chooseImage',
+        data: {
+          count: 9,
+          hlappid: '5e0ae2515e6ba391f9449554'
+        },
+        success(data) {
+          for (let i = 0; i < data.length; i++) {
+            var img = document.createElement('img');
+            img.src = data[i];
+            document.getElementById('imgwrap').appendChild(img);
+          }
+        }
+      });
+    };
+
+
+    document.getElementById('title').onclick = function () {
+      alert('修改标题啊');
+      HL.updateTitle({
+        api: 'hl.sdk.updateTitle',
+        data: {
+          title: '修改标题'
+        },
+        success(data) {
+          alert('修改成功了');
+        }
+      });
+    };
+
+
+
+    document.getElementById('preview').onclick = function () {
+      alert('预览图片');
+      HL.previewImage({
+        api: 'hl.sdk.previewImage',
+        data: {
+          current: 'http://192.168.11.160/zero-box/file/img/a91e3c80-32b2-11ea-8b79-4b01ce5cd82f.png', // 当前显示图片的http链接
+          urls: ['http://192.168.11.160/zero-box/file/img/a91e3c80-32b2-11ea-8b79-4b01ce5cd82f.png'] // 需要预览的图片http链接列表
+        },
+        success() {
+          alert('预览成功');
+          console.log('预览成功');
+        }
+      })
+    }
+
+  </script>
 
 </body>
 

@@ -8,9 +8,9 @@ const server = require('http').createServer(app.callback());
 const path = require('path');
 const config = require('./config/config');
 const wxApi = require('./router/wx');
-const zfbApi = require('./router/zfb');
+// const zfbApi = require('./router/zfb');
 const wxBase = require('./logic//wxBase');
-const zfbBase = require("./zfb/zfbBase");
+// const zfbBase = require("./zfb/zfbBase");
 
 app.use(async (ctx, next) => {
   // 加上去了 解决 cors 跨域问题
@@ -32,13 +32,13 @@ app.use(koaStatic(path.join(__dirname, 'public')));
 // 初始化微信
 wxBase.init();
 
-zfbBase.init();
+// zfbBase.init();
 
 // 接入微信API
 app.use(wxApi.routes()).use(wxApi.allowedMethods());
 
 // 接入支付宝API
-app.use(zfbApi.routes()).use(zfbApi.allowedMethods());
+// app.use(zfbApi.routes()).use(zfbApi.allowedMethods());
 
 
 server.listen(`${config.port}`, () => {

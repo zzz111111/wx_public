@@ -8,7 +8,6 @@ const server = require('../app');
 
 module.exports = {
   // 初始化微信服务 获取access_token，并缓存票据
-
   async init() {
     console.log('微信初始化函数调用');
     this.refreshAccess_token();
@@ -25,40 +24,49 @@ module.exports = {
    */
   async refreshAccess_token() {
     console.log('刷新token');
-    let tokenResult = await this.getToken();
-    // console.log('获取到的token码');
-    // console.log(tokenResult);
-    if (tokenResult.errcode) {
-      console.log('获取token失败');
-      return console.log(tokenResult)
-    }
-    // 请求成功 刷新token
-    config.wxConfig.access_token = tokenResult.access_token;
-    console.log('access_token获取并刷新成功');
-    // 获取完成access_token之后去刷新 jsapi_ticket
-    let jsapi_ticketResult = await this.getJsapi_ticket();
-    // console.log('获取到的票据结果为');
-    // console.log(jsapi_ticketResult);
-    if (jsapi_ticketResult.errcode !== 0) {
-      console.log('jsapi_ticket获取失败');
-      return console.log(jsapi_ticketResult);
-    }
-    console.log('刷新jsapi_ticket成功');
-    config.wxConfig.jsapi_ticket = jsapi_ticketResult.ticket;
+    try {
+      let tokenResult = await this.getToken();
+      // console.log('获取到的token码');
+      // console.log(tokenResult);
+      if (tokenResult.errcode) {
+        console.log('获取token失败');
+        return console.log(tokenResult)
+      }
+      // 请求成功 刷新token
+      config.wxConfig.access_token = tokenResult.access_token;
+      console.log('access_token获取并刷新成功');
+      // 获取完成access_token之后去刷新 jsapi_ticket
+      let jsapi_ticketResult = await this.getJsapi_ticket();
+      // console.log('获取到的票据结果为');
+      // console.log(jsapi_ticketResult);
+      if (jsapi_ticketResult.errcode !== 0) {
+        console.log('jsapi_ticket获取失败');
+        return console.log(jsapi_ticketResult);
+      }
+      console.log('刷新jsapi_ticket成功');
+      config.wxConfig.jsapi_ticket = jsapi_ticketResult.ticket;
 
-    console.log('查看获取内容');
-    console.log(config.wxConfig);
+      // console.log('查看获取内容');
+      // console.log();
 
-    // 获取完成之后请求微信卡卷的 api_ticket 并刷新
-    let api_ticketResult = await this.getApi_ticket();
-    // console.log('获取的微信卡卷的结果为');
-    // console.log(api_ticketResult);
-    if (api_ticketResult.errcode !== 0) {
-      console.log('获取微信卡卷api_ticket失败');
-      return console.log(api_ticketResult);
+      // 获取完成之后请求微信卡卷的 api_ticket 并刷新
+      let api_ticketResult = await this.getApi_ticket();
+      // console.log('获取的微信卡卷的结果为');
+      // console.log(api_ticketResult);
+      if (api_ticketResult.errcode !== 0) {
+        console.log('获取微信卡卷api_ticket失败');
+        return console.log(api_ticketResult);
+      }
+      // console.log('刷新api_ticket成功');
+
+      config.wxConfig.api_ticket = api_ticketResult.ticket;
+
+      console.log(config.wxConfig);
+      console.log('wx...初始化成功');
+    } catch (e) {
+      console.log('刷新的时候捕获到了什么异常');
+      console.log(e);
     }
-    console.log('刷新api_ticket成功');
-    config.wxConfig.api_ticket = api_ticketResult.ticket;
   },
 
   /**
@@ -129,7 +137,7 @@ module.exports = {
    * 获取authorization的token
    * @params {String} code 回调函数的code
    */
-  getAuthorizationAccess_token(code){
+  getAuthorizationAccess_token(code) {
     return axios({
       url: 'https://api.weixin.qq.com/sns/oauth2/access_token',
       params: {
@@ -145,7 +153,7 @@ module.exports = {
    * 通过refresh_token刷新获取access_token
    * @param {String} refresh_token
    */
-  refreshToken(refresh_token){
+  refreshToken(refresh_token) {
     return axios({
       url: 'https://api.weixin.qq.com/sns/oauth2/refresh_token?=APPID&=&refresh_token=REFRESH_TOKEN',
       params: {
@@ -161,7 +169,7 @@ module.exports = {
    * @param {String} access_token
    * @param {String} openid 
    */
-  gerUserInfoByOpenid({access_token, openid}){
+  gerUserInfoByOpenid({ access_token, openid }) {
     return axios({
       url: 'https://api.weixin.qq.com/sns/userinfo',
       params: {
@@ -175,7 +183,7 @@ module.exports = {
   /**
    * 获得模板客服模板id 
    */
-  getTemplate(){
+  getTemplate() {
     return axios({
       url: 'https://api.weixin.qq.com/cgi-bin/template/api_add_template',
       params: {
@@ -183,6 +191,28 @@ module.exports = {
       }
     });
   },
+
+  /**
+   * 根据openid获取用户信息
+   * 
+   * @param {String} openid 
+   */
+  getUserInfo(openid) {
+    console.log('请求参数', {
+      access_token: config.wxConfig.access_token,
+      openid: openid,
+      lang: 'zh_CN'
+    });
+    return axios({
+      url: 'https://api.weixin.qq.com/cgi-bin/user/info',
+      params: {
+        access_token: config.wxConfig.access_token,
+        openid: openid,
+        lang: 'zh_CN'
+      }
+    });
+  },
+
 
   /**
    * 发送消息 目前没有拓展那么多 都是一样的原理 目前只支持 图片 文本 语音 图文消息

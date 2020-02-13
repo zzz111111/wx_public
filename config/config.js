@@ -1,6 +1,6 @@
 module.exports = {
   // port: 8002,
-  port: 7021,
+  port: 3000,
 
   wxConfig: {
     // AppID: 'wx5910ab0a942c1030',
