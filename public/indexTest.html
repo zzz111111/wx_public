@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style>
     * {
@@ -21,6 +22,7 @@
       background-color: #fff;
     }
   </style>
+
   <!-- <script src="http://192.168.12.233:8910/target/target-script-min.js#anonymous"></script> -->
   <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
 </head>
@@ -30,7 +32,6 @@
 
 
   <div id="getOs">获取当前操作系统</div>
-  <div id="getBrowser">获取当前浏览器环境</div>
 
   <div id="click">点击了</div>
   <h1 id="pdfPerview">预览pdf文件</h1>
@@ -84,102 +85,86 @@
 
   <h1 id="userInfo">获取获取用户信息</h1>
 
-  <h1 id="btnClick">点击测试防抖</h1>
-
   <script src="./js/vconsole.js"></script>
-
-
   <script>
     new VConsole()
   </script>
 
+  <!-- <script src="./sdk.js"></script> -->
+
+  <!-- <script src="./1.js"></script> -->
+
   <script src="./hl-sdk.js"></script>
 
+  <!-- <script src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.0.1.52.js"></script> -->
+  <!-- <script src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script> -->
+
+  <!-- <script src="http://192.168.12.233:8910/target/target-script-min.js#anonymous"></script> -->
+
+
   <script>
 
-
-    function debounce(func, wait) {
-      console.log('执行了吗啊');
-      let timer = null;
-      return function () {
-        let context = this;
-        let args = arguments;
-
-        timer && clearTimeout(timer);
-        timer = setTimeout(() => {
-          console.log('最后执行了吗');
-          func.apply(context, args)
-        }, wait);
+    function GetOSInfo() {
+      var _pf = navigator.platform;
+      var appVer = navigator.userAgent;
+      if (_pf == "Win32" || _pf == "Windows") {
+        if (appVer.indexOf("WOW64") > -1) {
+          _bit = "64位";
+        }
+        else {
+          _bit = "32位";
+        }
+        if (appVer.indexOf("Windows NT 6.0") > -1 || appVer.indexOf("Windows Vista") > -1) {
+          if (_bit == '64位' || appVer.indexOf("Windows Vista") > -1) {
+            return 'Windows_vista ' + _bit;
+          }
+          else {
+            return "Unknow1";
+          }
+        }
+        else if (appVer.indexOf("Windows NT 6.1") > -1 || appVer.indexOf("Windows 7") > -1) {
+          if (_bit == '32位' || appVer.indexOf("Windows 7") > -1) {
+            return 'Windows_7 ' + _bit;
+          }
+          else {
+            return "Unknow";
+          }
+        }
+        else {
+          try {
+            var _winName = Array('2000', 'XP', '2003');
+            var _ntNum = appVer.match(/Windows NT 5.\d/i).toString();
+            return 'Windows_' + _winName[_ntNum.replace(/Windows NT 5.(\d)/i, "$1")] + " " + _bit;
+          }
+          catch (e) {
+            return 'Windows';
+          }
+        }
+      }
+      else if (_pf == "Mac68K" || _pf == "MacPPC" || _pf == "Macintosh") {
+        return "Mac";
+      }
+      else if (_pf == "X11") {
+        return "Unix";
+      }
+      else if (String(_pf).indexOf("Linux") > -1) {
+        return "Linux";
+      }
+      else {
+        return "Unknow";
       }
     }
-
-
-    function fn() {
-      console.log('函数执行');
-    }
-    let aaaaaaaaaaaaaaaaaaaaaaa = debounce(fn, 1000);
-
-
-    aaaaaaaaaaaaaaaaaaaaaaa();
-    aaaaaaaaaaaaaaaaaaaaaaa();
-    aaaaaaaaaaaaaaaaaaaaaaa();
-    aaaaaaaaaaaaaaaaaaaaaaa();
-
-    console.log();
-    document.getElementById('btnClick').onclick = debounce(() => {
-      console.log('111111111111111111111');
-    }, 1000);
-
-    // function GetOSInfo() {
-    //   var _pf = navigator.platform;
-    //   var appVer = navigator.userAgent;
-    //   if (_pf == "Win32" || _pf == "Windows") {
-    //     // if (appVer.indexOf("WOW64") > -1) {
-    //     //   _bit = "64位";
-    //     // } else {
-    //     //   _bit = "32位";
-    //     // }
-    //     // if (appVer.indexOf("Windows NT 6.0") > -1 || appVer.indexOf("Windows Vista") > -1) {
-    //     //   if (_bit == '64位' || appVer.indexOf("Windows Vista") > -1) {
-    //     //     return 'Windows_vista ' + _bit;
-    //     //   } else {
-    //     //     return "Unknow1";
-    //     //   }
-    //     // } else if (appVer.indexOf("Windows NT 6.1") > -1 || appVer.indexOf("Windows 7") > -1) {
-    //     //   if (_bit == '32位' || appVer.indexOf("Windows 7") > -1) {
-    //     //     return 'Windows_7 ' + _bit;
-    //     //   }
-    //     //   else {
-    //     //     return "Unknow";
-    //     //   }
-    //     // } else {
-    //     //   try {
-    //     //     var _winName = Array('2000', 'XP', '2003');
-    //     //     var _ntNum = appVer.match(/Windows NT 5.\d/i).toString();
-    //     //     return 'Windows_' + _winName[_ntNum.replace(/Windows NT 5.(\d)/i, "$1")] + " " + _bit;
-    //     //   }
-    //     //   catch (e) {
-    //     //     return 'Windows';
-    //     //   }
-    //     // }
-
-    //     // 上面的细节系统问题就不再详细查询直接上windows
-    //     return 'Windows';
-    //   } else if (_pf == "Mac68K" || _pf == "MacPPC" || _pf == "Macintosh" || _pf == "MacIntel") {
-    //     return "Mac";
-    //   } else if (_pf == "X11") {
-    //     return "Unix";
-    //   } else if (String(_pf).indexOf("Linux") > -1) {
-    //     return "Linux";
-    //   } else {
-    //     return "Unknow";
-    //   }
-    // }
-
   </script>
 
+
   <script>
-    // console.log('当前的操作系统', GetOSInfo());
+
+
+
+    console.log('当前的操作系统', GetOSInfo())
+
+
+
 
     // 设备
     //     OS
@@ -197,25 +182,41 @@
     //         other    其他（浏览器
 
     document.getElementById('getOs').onclick = function () {
+
+
       console.log('查看当前操作系统');
-      HL.getOS({
-        api: 'hl.sdk.getOS',
+      HL.getOs({
+        api: 'hl.sdk.getOs',
         success(res) {
           console.log('当前的操作系统', res);
         }
       });
     };
 
+    console.log('当前打印日志');
 
-    document.getElementById('getBrowser').onclick = function () {
-      console.log('获取当前的浏览器环境');
-      HL.getBrowser({
-        api: 'hl.sdk.getBrowser',
-        success(res) {
-          console.log(res);
-        }
-      });
+    // function fn(){
+    //   console.log('1111111111');
+    // }
+
+    document.getElementById('click').onclick = function () {
+      console.log('当前打印日志');
+
+      // axios({
+      //   url: 'http://xiaoye121.com:8001/bs/api/todayPlan?uid=f29c1910-6448-11e9-8067-63fe00919946'
+      // })
+      //   .then(res => {
+
+      //     console.log('请求结果');
+      //     console.log(res)
+      //   })
+      //   .catch(e => {
+      //     console.log('请求失败');
+      //     console.log(e);
+      //   })
     };
+
+
 
     // 预览pdf文件
     document.getElementById('pdfPerview').onclick = function () {
@@ -234,6 +235,91 @@
       })
     };
 
+    // 
+
+    // function fn(){
+
+    // }
+
+    // var  a= 1;
+    // for( let i = 0;i<arr.length;i++){
+    //   console.log(i);
+    // }
+
+    // for(let i=0;i<arr.length;i++){
+
+    // }
+
+
+
+    // for(let i=0;i)
+    // for
+    // for
+    // for
+    // for
+
+    // async function fn(){
+
+
+    //   // await 
+    // }
+
+    // function Fn(){
+    //   console.log('打印字符串');
+    // }
+
+    // Fn();
+
+
+    // async function fn(){
+
+    //   await new Promise((resolve, reject) => {
+    //     resolve({status: 200, msg})
+    //   });
+    //   return {
+
+    //   }
+    // }
+
+
+
+
+
+
+
+    // async function fn(){
+    //   console.log('111');
+    //   await new Promise(())
+    // }
+    // function HL(){
+    // }
+    // alert('页面');
+    //  HL.ready(function(){
+    // //   HL.getAccessToken({
+    // //     api: 'hl.sdk.getAccessToken',
+    // //     data: {
+    // //       appid: 'appid', // 当前调用接口的appid
+    // //     },
+    // //     success(res) {
+    // //       // alert('111');
+    // //       console.log('返回值1', res);
+    // //       console.log(res);
+    // //     }
+    // //   })
+
+    // //   HL.getAccessToken({
+    // //     api: 'hl.sdk.getAccessToken',
+    // //     data: {
+    // //       appid: 'appid', // 当前调用接口的appid
+    // //     },
+    // //     success(res) {
+    // //       // alert('222');
+    // //       console.log('返回值2', res);
+    // //       console.log(res);
+    // //     }
+    // //   })
+    // });
+
     document.getElementById('get_token').onclick = function () {
       console.log('获取token');
       HL.getAccessToken({
@@ -248,7 +334,6 @@
       })
     };
 
-
     document.getElementById('get_record').onclick = function () {
       // alert('获取录音');
       HL.getRecord({
@@ -262,9 +347,6 @@
         }
       });
     };
-
-
-
 
     document.getElementById('get_scanCode').onclick = function () {
       console.log('调用扫一扫功能');
@@ -285,7 +367,6 @@
         }
       })
     };
-
 
     document.getElementById('backHome').onclick = function () {
       console.log('回到首页');
@@ -669,6 +750,7 @@
 
 
   </script>
+
 </body>
 
 </html>

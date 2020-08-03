@@ -27,7 +27,7 @@
   var isReady = 'pending'; // pending认证中 ok可以了
   var readyCallback = null;
   // 注入sdk config能力列表
-  var config = ['mail', 'chooseImage', 'updateTitle', 'previewImage', 'scrollBody', 'backHome', 'getUserInfo', 'getLocalStorage', 'getSessionStorage', 'writeAutograph', 'getAccessToken', 'getRecord', 'scanCode', 'closeWindow', 'previewFile', 'getOS', 'getBrowser'];
+  var config = ['mail', 'chooseImage', 'updateTitle', 'previewImage', 'scrollBody', 'backHome', 'getUserInfo', 'getLocalStorage', 'getSessionStorage', 'writeAutograph', 'getAccessToken', 'getRecord', 'scanCode', 'closeWindow', 'previewFile'];
 
   document.addEventListener('UniAppJSBridgeReady', function () {
     // 此时API可以正常使用了

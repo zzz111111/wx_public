@@ -37,4 +37,7 @@ router.get('/user_template', wxLogic.getTemplate);
 // 测试使用postman上传数组
 router.post('/test_arr', wxLogic.testArrary);
 
+// 测试规则
+router.get('/node_rules', wxLogic.nodeRules);
+
 module.exports = router;

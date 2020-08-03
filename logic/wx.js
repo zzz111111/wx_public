@@ -1,6 +1,7 @@
 const config = require('../config/config');
 const utils = require('../utils/utils');
 const wxBase = require('./wxBase');
+const RuleEngine = require('node-rules');
 
 const url = require('url');
 
@@ -170,7 +171,7 @@ exports.getAccess_token = async ctx => {
     console.log(ctx);
     console.log(ctx.query);
     console.log(ctx.request.body);
-    
+
     ctx.body = __handleAPIRes({
       access_token: config.wxConfig.access_token
     });
@@ -490,7 +491,7 @@ exports.openid2user = async ctx => {
 exports.openid2UnionUser = async (ctx) => {
   try {
     console.log('请求到了我');
-    let {openid} = ctx.query;
+    let { openid } = ctx.query;
 
     let userInfo = await wxBase.getUserInfo(openid);
     console.log('获取的用户信息', userInfo);
@@ -619,3 +620,54 @@ exports.testArrary = async ctx => {
     ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
   }
 };
+
+
+
+/* Creating Rule Engine instance */
+let R = new RuleEngine();
+
+/* Add a rule */
+var rule = {
+  "condition": function (R) {
+    console.log('this是什么', this);
+    R.when(this.transactionTotal < 500);
+  },
+  "consequence": function (R) {
+    this.result = false;
+    this.reason = "The transaction was blocked as it was less than 500";
+    R.stop();
+  }
+};
+
+/* Register Rule */
+R.register(rule);
+
+/* Add a Fact with less than 500 as transaction, and this should be blocked */
+var fact = {
+  "name": "user4",
+  "application": "MOB2",
+  "transactionTotal": 600,
+  "cardType": "Credit Card"
+};
+
+/**
+ * 测试规则引擎
+ */
+exports.nodeRules = async ctx => {
+  try {
+    console.log('接收到请求数据');
+
+    /* Check if the engine blocks it! */
+    R.execute(fact, function (data) {
+      console.log('返回结果', data);
+      if (data.result) {
+        console.log("Valid transaction");
+      } else {
+        console.log("Blocked Reason:" + data.reason);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    ctx.body = __handleAPIRes('服务器繁忙，请稍后再试', 500);
+  }
+}

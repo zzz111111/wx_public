@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input id="voice" type="file" accept="audio/*" capture=""> 
+  <!-- microphone -->
+
+  <audio id="audio" controls="controls" src=""></audio>
+
+  <script src="../js/vconsole.js"></script>
+  <script>
+    new VConsole()
+  </script>
+  <script>
+
+    var oVoice = document.getElementById('voice');
+    var oAudio = document.getElementById('audio');
+
+    // 生成图片地址
+    function fileToBlobUrl(file) {
+      if (window.URL) {
+        return window.URL.createObjectURL(file);
+      } else if (window.webkitURL) {
+        return window.webkitURL.createObjectURL(file);
+      } else {
+        return null;
+      }
+    }
+
+
+
+    oVoice.addEventListener('change', function (e) {
+      console.log('录音完成');
+      console.log(e.target.files);
+      let file = e.target.files[0];
+      let blobUrl = fileToBlobUrl(file);
+      console.log('blog地址：' + blobUrl);
+      oAudio.src = blobUrl;
+    });
+
+  </script>
+
+</body>
+
+</html>

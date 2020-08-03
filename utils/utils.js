@@ -4,7 +4,6 @@
 const crypto = require('crypto');
 const xml2js = require('xml2js');
 
-
 /**
  * 对字符串进行字典排序并进行sha1加密
  */
@@ -28,12 +27,11 @@ exports.randomString = (len) => {
   var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
   var maxPos = $chars.length;
   var pwd = '';
-  for (i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
     pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
   }
   return pwd;
 };
-
 
 /**
  * XML转 JSON  JSON --> XML
@@ -57,3 +55,10 @@ exports.xml = {
     return builder.buildObject(jsonObj);
   }
 };
+
+// obj = {
+//   "api": "hl.sdk.3doRreal",
+//   "data": {
+//     "type": "real", // real 切换到实景，3d切换到3d线框图
+//   }
+// }

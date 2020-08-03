@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style>
     * {
@@ -21,16 +22,13 @@
       background-color: #fff;
     }
   </style>
-  <!-- <script src="http://192.168.12.233:8910/target/target-script-min.js#anonymous"></script> -->
-  <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+
+<!-- <script src="http://192.168.12.233:8910/target/target-script-min.js#anonymous"></script> -->
+<!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
 </head>
 
 <body>
   3000端口子页面
-
-
-  <div id="getOs">获取当前操作系统</div>
-  <div id="getBrowser">获取当前浏览器环境</div>
 
   <div id="click">点击了</div>
   <h1 id="pdfPerview">预览pdf文件</h1>
@@ -73,7 +71,7 @@
   <img id="img1" src="" alt="">
 
   <h1 id="preview">预览图片</h1>
-  <!-- <img src="http://192.168.11.160/zero-box/file/img/a91e3c80-32b2-11ea-8b79-4b01ce5cd82f.png" alt=""> -->
+  <img src="http://192.168.11.160/zero-box/file/img/a91e3c80-32b2-11ea-8b79-4b01ce5cd82f.png" alt="">
 
   <div id="txt"></div>
 
@@ -84,141 +82,50 @@
 
   <h1 id="userInfo">获取获取用户信息</h1>
 
-  <h1 id="btnClick">点击测试防抖</h1>
-
-  <script src="./js/vconsole.js"></script>
-
-
+  <!-- <script src="./js/vconsole.js"></script> -->
   <script>
-    new VConsole()
+    // new VConsole()
   </script>
 
+  <!-- <script src="./sdk.js"></script> -->
+
+  <!-- <script src="./1.js"></script> -->
+  
   <script src="./hl-sdk.js"></script>
 
+  <!-- <script src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.0.1.52.js"></script> -->
+  <!-- <script src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script> -->
+
+  <script src="http://192.168.12.233:8910/target/target-script-min.js#anonymous"></script>
   <script>
 
+    console.log('当前打印日志');
 
-    function debounce(func, wait) {
-      console.log('执行了吗啊');
-      let timer = null;
-      return function () {
-        let context = this;
-        let args = arguments;
-
-        timer && clearTimeout(timer);
-        timer = setTimeout(() => {
-          console.log('最后执行了吗');
-          func.apply(context, args)
-        }, wait);
-      }
-    }
-
-
-    function fn() {
-      console.log('函数执行');
-    }
-    let aaaaaaaaaaaaaaaaaaaaaaa = debounce(fn, 1000);
-
-
-    aaaaaaaaaaaaaaaaaaaaaaa();
-    aaaaaaaaaaaaaaaaaaaaaaa();
-    aaaaaaaaaaaaaaaaaaaaaaa();
-    aaaaaaaaaaaaaaaaaaaaaaa();
-
-    console.log();
-    document.getElementById('btnClick').onclick = debounce(() => {
-      console.log('111111111111111111111');
-    }, 1000);
-
-    // function GetOSInfo() {
-    //   var _pf = navigator.platform;
-    //   var appVer = navigator.userAgent;
-    //   if (_pf == "Win32" || _pf == "Windows") {
-    //     // if (appVer.indexOf("WOW64") > -1) {
-    //     //   _bit = "64位";
-    //     // } else {
-    //     //   _bit = "32位";
-    //     // }
-    //     // if (appVer.indexOf("Windows NT 6.0") > -1 || appVer.indexOf("Windows Vista") > -1) {
-    //     //   if (_bit == '64位' || appVer.indexOf("Windows Vista") > -1) {
-    //     //     return 'Windows_vista ' + _bit;
-    //     //   } else {
-    //     //     return "Unknow1";
-    //     //   }
-    //     // } else if (appVer.indexOf("Windows NT 6.1") > -1 || appVer.indexOf("Windows 7") > -1) {
-    //     //   if (_bit == '32位' || appVer.indexOf("Windows 7") > -1) {
-    //     //     return 'Windows_7 ' + _bit;
-    //     //   }
-    //     //   else {
-    //     //     return "Unknow";
-    //     //   }
-    //     // } else {
-    //     //   try {
-    //     //     var _winName = Array('2000', 'XP', '2003');
-    //     //     var _ntNum = appVer.match(/Windows NT 5.\d/i).toString();
-    //     //     return 'Windows_' + _winName[_ntNum.replace(/Windows NT 5.(\d)/i, "$1")] + " " + _bit;
-    //     //   }
-    //     //   catch (e) {
-    //     //     return 'Windows';
-    //     //   }
-    //     // }
-
-    //     // 上面的细节系统问题就不再详细查询直接上windows
-    //     return 'Windows';
-    //   } else if (_pf == "Mac68K" || _pf == "MacPPC" || _pf == "Macintosh" || _pf == "MacIntel") {
-    //     return "Mac";
-    //   } else if (_pf == "X11") {
-    //     return "Unix";
-    //   } else if (String(_pf).indexOf("Linux") > -1) {
-    //     return "Linux";
-    //   } else {
-    //     return "Unknow";
-    //   }
+    // function fn(){
+    //   console.log('1111111111');
     // }
 
-  </script>
+    document.getElementById('click').onclick = function(){
+      console.log('当前打印日志');
 
-  <script>
-    // console.log('当前的操作系统', GetOSInfo());
-
-    // 设备
-    //     OS
-    //         android
-    //         ios
-    //         windows
-    //         linux
-    //      browser
-    //         wx      微信
-    //         wxwork  企业微信
-    //         ga_wxwork  政务微信 
-    //         dd   钉钉
-    //         ex_dd   专属钉钉
-    //         mx    木星
-    //         other    其他（浏览器
-
-    document.getElementById('getOs').onclick = function () {
-      console.log('查看当前操作系统');
-      HL.getOS({
-        api: 'hl.sdk.getOS',
-        success(res) {
-          console.log('当前的操作系统', res);
-        }
-      });
+      // axios({
+      //   url: 'http://xiaoye121.com:8001/bs/api/todayPlan?uid=f29c1910-6448-11e9-8067-63fe00919946'
+      // })
+      //   .then(res => {
+         
+      //     console.log('请求结果');
+      //     console.log(res)
+      //   })
+      //   .catch(e => {
+      //     console.log('请求失败');
+      //     console.log(e);
+      //   })
     };
 
 
-    document.getElementById('getBrowser').onclick = function () {
-      console.log('获取当前的浏览器环境');
-      HL.getBrowser({
-        api: 'hl.sdk.getBrowser',
-        success(res) {
-          console.log(res);
-        }
-      });
-    };
 
     // 预览pdf文件
-    document.getElementById('pdfPerview').onclick = function () {
+    document.getElementById('pdfPerview').onclick = function(){
       alert('预览pdf文件');
       HL.previewFile({
         api: 'hl.sdk.previewFile',
@@ -227,12 +134,97 @@
           name: 'HTTP协议中文版', // 需要预览文件的文件名(不填的话取url的最后部分)
           size: 41984 // 需要预览文件的字节大小(必填)
         },
-        success(data) {
+        success(data){
           console.log('回调数据');
           console.log(data)
         }
       })
     };
+
+// 
+
+    function fn(){
+
+    }
+
+    var  a= 1;
+    for( let i = 0;i<arr.length;i++){
+      console.log(i);
+    }
+
+    for(let i=0;i<arr.length;i++){
+
+    }
+
+
+
+    // for(let i=0;i)
+    // for
+    // for
+    // for
+    // for
+
+    async function fn(){
+      
+
+      // await 
+    }
+
+    function Fn(){
+      console.log('打印字符串');
+    }
+
+    Fn();
+
+
+    async function fn(){
+
+      await new Promise((resolve, reject) => {
+        resolve({status: 200, msg})
+      });
+      return {
+
+      }
+    }
+
+
+
+
+
+
+
+    // async function fn(){
+    //   console.log('111');
+    //   await new Promise(())
+    // }
+    // function HL(){
+    // }
+    // alert('页面');
+    //  HL.ready(function(){
+    // //   HL.getAccessToken({
+    // //     api: 'hl.sdk.getAccessToken',
+    // //     data: {
+    // //       appid: 'appid', // 当前调用接口的appid
+    // //     },
+    // //     success(res) {
+    // //       // alert('111');
+    // //       console.log('返回值1', res);
+    // //       console.log(res);
+    // //     }
+    // //   })
+
+    // //   HL.getAccessToken({
+    // //     api: 'hl.sdk.getAccessToken',
+    // //     data: {
+    // //       appid: 'appid', // 当前调用接口的appid
+    // //     },
+    // //     success(res) {
+    // //       // alert('222');
+    // //       console.log('返回值2', res);
+    // //       console.log(res);
+    // //     }
+    // //   })
+    // });
 
     document.getElementById('get_token').onclick = function () {
       console.log('获取token');
@@ -248,25 +240,21 @@
       })
     };
 
-
-    document.getElementById('get_record').onclick = function () {
+    document.getElementById('get_record').onclick = function(){
       // alert('获取录音');
       HL.getRecord({
         api: 'hl.sdk.record',
         data: {
           type: 'cloud', // local返回本地路径，可供自己上传， cloud返回云路径（HTTP地址）
         },
-        success(res) {
+        success(res){
           console.log('返回值');
           console.log(JSON.stringify(res));
         }
       });
     };
 
-
-
-
-    document.getElementById('get_scanCode').onclick = function () {
+    document.getElementById('get_scanCode').onclick = function(){
       console.log('调用扫一扫功能');
       HL.scanCode({
         api: 'hl.sdk.scanCode',
@@ -274,27 +262,26 @@
           onlyFromCamera: true, // 默认否 是否只能从相机扫码 {Boolean}，不允许从相册选择图片 该参数仅在APP端生效
           scanType: ['qrCode'], // 扫码类型  可以指定扫二维码还是条形码（一维码），默认二者都有  qrCode二维码， 一维码barCode
         },
-        success(res) {
-          if (res.code == 0) {
+        success(res){
+          if(res.code == 0){
             console.log('扫码结果', res);
             console.log(JSON.stringify(res));
             alert('我扫码的内容' + res.data.con);
-          } else {
+          }else{
             alert(JSON.stringify(res));
           }
         }
       })
     };
 
-
-    document.getElementById('backHome').onclick = function () {
+    document.getElementById('backHome').onclick = function(){
       console.log('回到首页');
-      HL.backHome({
-        api: 'hl.sdk.backHome',
-        success(res) {
-          console.log('测试结果', res);
-        }
-      });
+        HL.backHome({
+          api: 'hl.sdk.backHome',
+          success(res){
+            console.log('测试结果', res);
+          }
+        });
     };
 
     document.getElementById('child_page').onclick = function () {
@@ -320,14 +307,14 @@
     };
 
     // 关闭当前页面
-    document.getElementById('close_page').onclick = function () {
+    document.getElementById('close_page').onclick = function(){
       // alert('关闭页面');
       // window.location.go(-1);
       setTimeout(() => {
         window.close();
       }, 1000)
     }
-
+    
 
     document.getElementById('getLocalStorage').onclick = function () {
       // alert('获取localStorage');
@@ -667,8 +654,37 @@
       });
     };
 
+    /*
+      模块          文件名        路径
+      通讯录模块    addressBook  /zero-box/mailList
+      应用模块      application  /zero-box/application
+      文件相关模块   file        /zero-box/file
+      日志模块      journal      /zero-box/log
+      消息列表      news         /zero-box/news
+      手机相关      phone        /zero-box/sms
+      流程相关      process      /zero-box/flowPath
+      系统相关      system       /zero-box/system
+      权限          authorized  /zero-box/jurisdiction
+    */
+
+
+/*
+  
+    api: addressBook.getLabelGroup
+    
+
+移除角色接口  this.$api.addressBook.removeLabel 参数改变 {company_id: 企业id, label_id: 45987}
+获取角色内人员信息 this.$api.addressBook.getLabelDetail 参数改变
+编辑角色名称  this.$api.addressBook.updateLabel 参数改变
+
+原有接口进行 更新 修改 新增接口
+角色人员增加删除 this.$api.addressBook.updateLabelPeople
+   
+
+*/
 
   </script>
+
 </body>
 
 </html>
